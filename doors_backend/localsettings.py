@@ -7,12 +7,14 @@ from datetime import date
 
 from .settings import *
 
-
-DATABASES = json.load(open(os.environ['GOODS_DB_CONFIG']))
+try:
+    DATABASES = json.load(open(os.environ['GOODS_DB_CONFIG']))
+except Exception, e:
+    logging.exception(e)
 
 
 # Loggers
 try:
-    LOGGING = json.load(open(os.environ['GOODS_LOGGERS']))
+    LOGGING = json.load(open(os.environ['DOORS_LOGGERS']))
 except Exception, e:
-    logging.exception(e)
+    logging.exception(str(os.environ))

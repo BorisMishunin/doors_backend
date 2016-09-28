@@ -29,7 +29,7 @@ router = routers.DefaultRouter()
 
 
 urlpatterns = patterns(
-    'etachka_departments_service.views',
+    'doors_backend.views',
     url(r'^resources', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
 )
