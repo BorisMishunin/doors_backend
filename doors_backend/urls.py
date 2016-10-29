@@ -30,8 +30,11 @@ router = routers.DefaultRouter()
 
 urlpatterns = patterns(
     'doors_backend.views',
-    url(r'^resources', include(router.urls)),
+    url(r'^resourceees', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^goods/getItems', 'getItems',
+        name='getItems'),
+    url(r'social/', include('social.apps.django_app.urls', namespace='social')),
 )
 
 #urlpatterns = format_suffix_patterns(urlpatterns)
