@@ -16,10 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework import routers
+import views
 
 
 
@@ -28,14 +29,13 @@ router = routers.DefaultRouter()
 
 
 
-urlpatterns = patterns(
-    'doors_backend.views',
+urlpatterns = [
     url(r'^resourceees', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^goods/getItems', 'getItems',
+    url(r'^goods/getItems', views.getItems,
         name='getItems'),
     url(r'social/', include('social.apps.django_app.urls', namespace='social')),
-)
+]
 
 #urlpatterns = format_suffix_patterns(urlpatterns)
 
