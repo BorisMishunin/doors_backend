@@ -29,7 +29,7 @@ def profile_decorator():
     return decorator
 
 @profile_decorator()
-def invoke_resources(request, url, params={}, method='get', data=None):
+def invoke_resources(sevice_name, request, url, params={}, method='get', data=None):
     if not params:
         params = request.GET.copy()
 
@@ -48,7 +48,7 @@ def invoke_resources(request, url, params={}, method='get', data=None):
     requests_args['params'] = QueryDict('', mutable=True)
     requests_args['params'] = params
 
-    response = requests.request(method, urlparse.urljoin(settings.services['doors_goods_service'], '/resources/' + url), **requests_args)
+    response = requests.request(method, urlparse.urljoin(settings.services[sevice_name], '/resources/' + url), **requests_args)
 
     view_response = HttpResponse(
         response.content,
@@ -68,13 +68,47 @@ def invoke_resources(request, url, params={}, method='get', data=None):
 
     return view_response
 
+@profile_decorator()
+def invoke_service(service_name, endpoint, params={}, method='get'):
+    manager = getattr(requests, method)
+    if method == 'get':
+        resp = manager(settings.services[service_name] + '/' + endpoint,
+                       params=params)
+    else:
+        resp = manager(settings.services[service_name] + '/' + endpoint,
+                       data=params)
+    if resp.ok:
+        return resp.json()
+    else:
+        return {'code': resp.status_code, 'body': resp.text}
 
 def getItems(request):
     """
     """
     if request.method == 'GET':
-        response = invoke_resources(request, 'goods',
+        response = invoke_resources('doors_goods_service', request, 'goods',
                               method='get')
         return response
     else:
         return HttpResponseBadRequest('Not valid request method')
+
+def getGoodsType(request):
+    """
+    """
+    if request.method == 'GET':
+        response = invoke_resources('doors_goods_service', request, 'goods_type',
+                              method='get')
+        return response
+    else:
+        return HttpResponseBadRequest('Not valid request method')
+
+def getActions(request):
+    """
+    """
+    if request.method == 'GET':
+        response = invoke_resources('doors_marketplace_service', request, 'actions',
+                              method='get')
+        return response
+    else:
+        return HttpResponseBadRequest('Not valid request method')
+

@@ -13,6 +13,7 @@ from .social_auth import *
 
 services = {
     'doors_goods_service': os.environ['DOORS_SERVICE_GOODS'],
+    'doors_marketplace_service': os.environ['DOORS_SERVICE_MARKETPLACE']
 }
 
 try:
