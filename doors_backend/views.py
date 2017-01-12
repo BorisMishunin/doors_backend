@@ -6,10 +6,12 @@ import requests
 import doors_backend.localsettings as settings
 from django.http import HttpResponseBadRequest, HttpResponse, QueryDict
 import urlparse
+from django.views.decorators.http import require_POST, require_GET
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 profile_logger = logging.getLogger('frontend_profile')
+
 
 def format_function(func, *args, **kw):
     args = map(repr, args)
@@ -82,33 +84,38 @@ def invoke_service(service_name, endpoint, params={}, method='get'):
     else:
         return {'code': resp.status_code, 'body': resp.text}
 
+@require_GET
 def getItems(request):
     """
     """
-    if request.method == 'GET':
-        response = invoke_resources('doors_goods_service', request, 'goods',
+    response = invoke_resources('doors_goods_service', request, 'goods',
                               method='get')
-        return response
-    else:
-        return HttpResponseBadRequest('Not valid request method')
+    return response
 
+@require_GET
+def getItem(request, id):
+    """
+    """
+    response = invoke_resources('doors_goods_service', request, 'goods/'+id,
+                              method='get')
+    return response
+
+@require_GET
 def getGoodsType(request):
     """
     """
-    if request.method == 'GET':
-        response = invoke_resources('doors_goods_service', request, 'goods_type',
-                              method='get')
-        return response
-    else:
-        return HttpResponseBadRequest('Not valid request method')
 
+    response = invoke_resources('doors_goods_service', request, 'goods_type',
+                              method='get')
+    return response
+
+
+@require_GET
 def getActions(request):
     """
     """
-    if request.method == 'GET':
-        response = invoke_resources('doors_marketplace_service', request, 'actions',
+    response = invoke_resources('doors_marketplace_service', request, 'actions',
                               method='get')
-        return response
-    else:
-        return HttpResponseBadRequest('Not valid request method')
+    return response
+
 

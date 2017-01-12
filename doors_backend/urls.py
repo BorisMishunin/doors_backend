@@ -34,6 +34,8 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^goods/getItems', views.getItems,
         name='getItems'),
+    url(r'^goods/getItem/(?P<id>[^/.]+)$', views.getItem,
+        name='getItem'),
     url(r'^goods/getGoodsType', views.getGoodsType,
         name='getGoodsType'),
     url(r'^marketplace/getActions', views.getActions,
